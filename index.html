@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVerify | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body class="bg-[#020617] text-slate-100 min-h-screen">
+    <div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden">
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-600/20 blur-[100px] rounded-full"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-emerald-600/10 blur-[100px] rounded-full"></div>
+    </div>
+
+    <div class="container mx-auto px-6 py-8">
+        <header class="flex justify-between items-center mb-12 glass-panel p-6 rounded-3xl">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04clanM12 21.75V12"></path></svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-tighter">EDUVERIFY</h1>
+                    <p class="text-[10px] text-blue-400 font-mono tracking-widest uppercase">{{ user_info.name }} Node</p>
+                </div>
+            </div>
+            <a href="/logout" class="text-sm text-gray-400 hover:text-red-400 transition-colors">Logout</a>
+        </header>
+
+        <div class="grid lg:grid-cols-3 gap-10">
+            <div class="lg:col-span-1 space-y-6">
+                <div class="glass-panel p-8 rounded-3xl">
+                    <h2 class="text-xl font-bold mb-6 text-blue-300">Issue Credential</h2>
+                    <div class="space-y-4">
+                        <input id="student" oninput="updatePreview()" type="text" placeholder="Student Name" class="form-input">
+                        <input id="degree" oninput="updatePreview()" type="text" placeholder="Degree Type" class="form-input">
+                        <input id="gpa" oninput="updatePreview()" type="text" placeholder="GPA (e.g. 3.9)" class="form-input">
+                        <button onclick="issueCertificate()" class="w-full bg-gradient-to-r {{ user_info.color }} text-white font-bold py-4 rounded-2xl shadow-lg hover:brightness-110 transition-all">
+                            Sign & Mine Block
+                        </button>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-3xl">
+                    <h3 class="text-sm font-bold text-emerald-400 mb-4 uppercase tracking-widest">Live Ledger</h3>
+                    <div id="ledger" class="space-y-4 max-h-[300px] overflow-y-auto pr-2"></div>
+                    <div class="flex gap-2 mt-4">
+                    <button onclick="verifyChain()" class="flex-1 py-2 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold hover:bg-emerald-500/30 transition-all">
+                        Verify Integrity
+                    </button>
+                    <button onclick="simulateHack()" class="px-4 py-2 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 text-xs font-bold hover:bg-red-500/20 transition-all">
+                        Simulate Hack
+                    </button>
+                    </div>
+
+                    <button onclick="downloadPDF()" class="mt-6 px-8 py-3 bg-white text-slate-900 rounded-full font-bold shadow-lg hover:scale-105 transition-all flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Download Official PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 flex flex-col items-center justify-center p-10">
+                <div id="cert-preview" class="certificate-card w-full max-w-lg aspect-[1.4/1] p-10 text-center flex flex-col justify-between relative">
+                    <div class="absolute inset-0 opacity-5" style="background-image: url('https://www.transparenttextures.com/patterns/gray-floral.png');"></div>
+                    <div class="border-2 border-slate-200 h-full p-6 flex flex-col justify-between">
+                        <div class="font-serif text-sm uppercase tracking-[0.3em] text-slate-500">Certificate of Completion</div>
+                        <div>
+                            <p class="font-serif italic text-sm mb-2">This is to certify that</p>
+                            <h3 id="prev-name" class="text-3xl font-serif font-bold text-slate-800 border-b-2 border-slate-800 inline-block mb-4">Student Name</h3>
+                            <p class="font-serif italic text-sm">has successfully achieved the degree of</p>
+                            <h4 id="prev-degree" class="text-xl font-bold text-blue-900 mt-2">Degree Name</h4>
+                        </div>
+                        <div class="flex justify-between items-end text-[10px] font-mono text-slate-400 uppercase">
+                            <div class="text-left">GPA: <span id="prev-gpa">0.0</span><br>Date: 03.03.2026</div>
+                            <div class="text-right">Block Verified<br>Nodes: Alpha, Beta</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="pdf-container" style="position: fixed; left: -2000px; top: 0; z-index: -999; visibility: visible;">
+    <div id="pdf-blueprint" style="width: 1123px; height: 794px; padding: 60px; background: white; color: #1e293b; font-family: 'serif'; border: 30px double #cbd5e1; text-align: center; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;">
+        <div style="border: 4px solid #f1f5f9; height: 100%; padding: 50px; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box;">
+            
+            <div style="text-transform: uppercase; letter-spacing: 8px; font-size: 18px; color: #64748b; font-weight: bold;">
+                Official Certificate of Completion
+            </div>
+            
+            <div style="margin: 40px 0;">
+                <p style="font-style: italic; font-size: 22px; color: #475569; margin-bottom: 10px;">This is to certify that</p>
+                <h1 id="pdf-name" style="font-size: 64px; margin: 10px 0; border-bottom: 3px solid #1e293b; display: inline-block; padding: 0 30px;">Student Name</h1>
+                <p style="font-style: italic; font-size: 22px; color: #475569; margin-top: 30px;">has successfully achieved the degree of</p>
+                <h2 id="pdf-degree" style="font-size: 32px; color: #1e3a8a; text-transform: uppercase; margin-top: 10px; font-weight: bold;">Degree Name</h2>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; font-family: monospace; font-size: 14px; color: #94a3b8; text-transform: uppercase;">
+                <div style="text-align: left; line-height: 1.6;">
+                    GPA Score: <span id="pdf-gpa" style="color: #475569; font-weight: bold;">0.0</span><br>
+                    Issue Date: <span id="pdf-date" style="color: #475569; font-weight: bold;"></span>
+                </div>
+                <div style="text-align: right; line-height: 1.6;">
+                    <span style="font-weight: bold; color: #64748b;">Verified by:</span> EduVerify Blockchain<br>
+                    <span style="font-weight: bold; color: #64748b;">Status:</span> Immutable Ledger Record<br>
+                    <div style="margin-top: 5px;">
+                        <span style="font-size: 11px; color: #94a3b8; font-family: monospace; background: #f8fafc; padding: 2px 5px; border-radius: 4px;">
+                            BLOCK HASH: <span id="pdf-hash"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script src="{{ url_for('static', filename='js/blockchain.js') }}"></script>
+</body>
+</html>
