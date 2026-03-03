@@ -1,19 +1,157 @@
-🎓 EduVerify: Blockchain-Based Academic CredentialingEduVerify is a decentralized academic credentialing platform designed to eliminate degree fraud. By leveraging Blockchain technology, it provides a secure, immutable, and instantly verifiable way for universities to issue certificates and for employers to verify them.🏗️ Project StructureThe project follows a modular Flask architecture, organized for scalability and containerization.PlaintextEDUVERIFY/
+🎓 EduVerify – Blockchain-Based Academic Credentialing
+
+EduVerify is a decentralized academic credentialing platform designed to eliminate degree fraud.
+By leveraging Blockchain technology (SHA-256 hashing), it provides a secure, immutable, and instantly verifiable system for universities to issue certificates and for employers to verify them.
+
+🌍 Problem Statement
+
+Academic certificate fraud is a growing global issue. Traditional paper-based certificates:
+
+❌ Can be forged
+
+❌ Are difficult to verify
+
+❌ Require manual authentication
+
+EduVerify solves this using a blockchain-backed verification system that ensures:
+
+🔐 Data Integrity
+
+📜 Immutable Certificate Records
+
+⚡ Instant Verification
+
+🏗️ Project Architecture
+
+The project follows a modular Flask architecture, designed for scalability and containerized deployment.
+
+EDUVERIFY/
+│
 ├── app/
-│   ├── static/               # Assets served by the web server
+│   ├── static/
 │   │   ├── css/
-│   │   │   └── style.css     # Glassmorphism & Tailwind styling
+│   │   │   └── style.css
 │   │   └── js/
-│   │       └── blockchain.js # Frontend blockchain logic & PDF engine
-│   └── templates/            # HTML Views
-│       ├── index.html        # Main Dashboard (Verified Ledger)
-│       └── login.html        # Multi-tenant University Portal
-├── blockchain.py             # Core Blockchain Class (SHA-256 logic)
-├── main.py                   # Flask Application entry point
-├── docker-compose.yml        # Multi-container orchestration
-├── Dockerfile                # Image build configuration
-└── requirements.txt          # Python dependencies
-🚀 Key Features1. Multi-Tenant University NodesAllows different educational institutions (e.g., Alpha University, Beta Institute) to log in securely and manage their own certificate issuance.2. Immutable Ledger (SHA-256)Each certificate is mined into a block that contains a unique cryptographic hash and the hash of the previous block.Security: Any change to student data breaks the cryptographic link.Verification: A "Verify Integrity" tool checks the entire chain in real-time.3. Dynamic Blockchain CertificatesGenerates professional A4 PDF certificates directly from blockchain data.Digital Seal: Every PDF is stamped with the unique Block Hash.Integrity Proof: The hash on the PDF matches the fingerprint in the live ledger.🛠️ Tech StackCategoryTechnologyBackendPython (Flask)BlockchainCustom SHA-256 ChainingFrontendTailwind CSS (Glassmorphism), JavaScriptPDF Enginehtml2pdf.js / html2canvasDevOpsDocker, Docker Compose⚙️ Installation & SetupUsing Docker (Recommended)Ensure you have Docker and Docker Compose installed.Clone the repository and navigate to the folder.Run the following command:Bashdocker-compose up --build
-Access the app at http://localhost:5000.Manual SetupInstall dependencies:Bashpip install -r requirements.txt
-Run the application:Bashpython main.py
-🛡️ Security Demonstration (Simulate Hack)The project includes a "Simulate Hack" feature.Mine a few certificate blocks.Click Simulate Hack to manually alter data in memory.Click Verify Integrity. The system will detect the hash mismatch and turn the status indicator RED, proving the data has been tampered with.🔮 Future WorkIPFS Integration: Decentralized storage for actual PDF certificate files.QR Code Verification: Direct mobile-scan verification for employers.Smart Contracts: Automated issuance based on academic credit completion.        
+│   │       └── blockchain.js
+│   │
+│   └── templates/
+│       ├── index.html
+│       └── login.html
+│
+├── blockchain.py
+├── main.py
+├── docker-compose.yml
+├── Dockerfile
+└── requirements.txt
+🚀 Key Features
+1️⃣ Multi-Tenant University Nodes
+
+Secure login for institutions (e.g., Alpha University, Beta Institute)
+
+Each university can issue certificates independently
+
+Role-based block creation authorization
+
+2️⃣ Immutable Blockchain Ledger (SHA-256)
+
+Each certificate is mined into a block containing:
+
+Student Name
+
+Degree
+
+GPA
+
+Timestamp
+
+Previous Block Hash
+
+Current Block Hash
+
+🔐 Security:
+Any modification to student data breaks the cryptographic chain.
+
+🟢 Verification:
+A built-in “Verify Integrity” tool recalculates all hashes in real time to ensure the chain is valid.
+
+3️⃣ Dynamic Blockchain Certificates (PDF)
+
+Professional A4 certificate generation
+
+Digital seal stamped with unique Block Hash
+
+Hash on the PDF matches the hash in the live ledger
+
+📌 Technologies used:
+
+html2pdf.js
+
+html2canvas
+
+🛠️ Tech Stack
+Category	Technology
+Backend	Python (Flask)
+Blockchain	Custom SHA-256 Hash Chaining
+Frontend	Tailwind CSS (Glassmorphism), JavaScript
+PDF Engine	html2pdf.js / html2canvas
+DevOps	Docker, Docker Compose
+⚙️ Installation & Setup
+🐳 Using Docker (Recommended)
+
+Ensure Docker and Docker Compose are installed.
+
+docker-compose up --build
+
+Access the application at:
+
+http://localhost:5000
+💻 Manual Setup
+
+Install dependencies:
+
+pip install -r requirements.txt
+
+Run the application:
+
+python main.py
+🛡️ Security Demonstration – Simulate Hack
+
+EduVerify includes a built-in "Simulate Hack" feature to demonstrate blockchain immutability.
+
+Steps:
+
+Mine a few certificate blocks
+
+Click Simulate Hack (modifies in-memory data)
+
+Click Verify Integrity
+
+🔴 The system detects hash mismatch
+🟢 Status turns RED
+✔️ Demonstrates tamper detection
+
+This proves the blockchain structure prevents undetected data manipulation.
+
+🔮 Future Enhancements
+
+🌐 IPFS Integration
+Store actual PDF certificates on decentralized storage.
+
+📱 QR Code Verification
+Employers can scan and instantly verify certificates.
+
+📜 Smart Contracts
+Automated issuance after academic credit completion.
+
+🏛️ Consortium Blockchain
+Multiple universities maintaining a shared distributed ledger.
+
+🎯 Use Cases
+
+Universities issuing tamper-proof degrees
+
+Employers verifying academic credentials
+
+Government educational boards
+
+Online certification platforms
