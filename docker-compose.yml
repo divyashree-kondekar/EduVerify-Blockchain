@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  university-alpha:
+    build: .
+    ports:
+      - "5001:5000"
+    volumes:
+      - .:/app
+  university-beta:
+    build: .
+    ports:
+      - "5002:5000"
+    volumes:
+      - .:/app
